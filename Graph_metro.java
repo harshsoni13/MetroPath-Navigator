@@ -1,5 +1,5 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 	
 	public class Graph_metro
@@ -271,6 +271,19 @@ import java.io.*;
 			int min_dis;
 			int min_time;
 		}
+		public int calculateFare(int distance)
+{
+    if(distance <= 5)
+        return 10;
+    else if(distance <= 10)
+        return 20;
+    else if(distance <= 20)
+        return 30;
+    else if(distance <= 30)
+        return 40;
+    else
+        return 50;
+}
 		
 		public String Get_Minimum_Distance(String src, String dst) 
 		{
@@ -559,8 +572,9 @@ import java.io.*;
 				System.out.println("4. GET SHORTEST TIME TO REACH FROM A 'SOURCE' STATION TO 'DESTINATION' STATION");
 				System.out.println("5. GET SHORTEST PATH (DISTANCE WISE) TO REACH FROM A 'SOURCE' STATION TO 'DESTINATION' STATION");
 				System.out.println("6. GET SHORTEST PATH (TIME WISE) TO REACH FROM A 'SOURCE' STATION TO 'DESTINATION' STATION");
-				System.out.println("7. EXIT THE MENU");
-				System.out.print("\nENTER YOUR CHOICE FROM THE ABOVE LIST (1 to 7) : ");
+				System.out.println("7. CALCULATE METRO FARE");
+				System.out.println("8. EXIT THE MENU");
+				System.out.print("\nENTER YOUR CHOICE FROM THE ABOVE LIST (1 to 8) : ");
 				int choice = -1;
 				try {
 					choice = Integer.parseInt(inp.readLine());
@@ -568,10 +582,7 @@ import java.io.*;
 					// default will handle
 				}
 				System.out.print("\n***********************************************************\n");
-				if(choice == 7)
-				{
-					System.exit(0);
-				}
+				
 				switch(choice)
 				{
 				case 1:
@@ -643,16 +654,20 @@ import java.io.*;
 					System.out.println("ENTER THE SOURCE AND DESTINATION STATIONS");
 					String s1 = inp.readLine();
 					String s2 = inp.readLine();
+					System.out.println("S1=["+s1+"]");
+					System.out.println("S1=["+s2+"]");
+					System.out.println("Contains S1="+g.containsVertex(s1));
+					System.out.println("Contains S2="+g.containsVertex(s2));
 				
 					HashMap<String, Boolean> processed2 = new HashMap<>();
-					if(!g.containsVertex(s1) || !g.containsVertex(s2) || !g.hasPath(s1, s2, processed2))
+					if(!g.containsVertex(s1) || !g.containsVertex(s2))
 						System.out.println("THE INPUTS ARE INVALID");
 					else 
 					{
 						ArrayList<String> str = g.get_Interchanges(g.Get_Minimum_Distance(s1, s2));
 						int len = str.size();
 						System.out.println("SOURCE STATION : " + s1);
-						System.out.println("SOURCE STATION : " + s2);
+						System.out.println("DESTINATION STATION : " + s2);
 						System.out.println("DISTANCE : " + str.get(len-1));
 						System.out.println("NUMBER OF INTERCHANGES : " + str.get(len-2));
 						//System.out.println(str);
@@ -674,7 +689,7 @@ import java.io.*;
 					String ss2 = inp.readLine();
 				
 					HashMap<String, Boolean> processed3 = new HashMap<>();
-					if(!g.containsVertex(ss1) || !g.containsVertex(ss2) || !g.hasPath(ss1, ss2, processed3))
+					if(!g.containsVertex(ss1) || !g.containsVertex(ss2))
 						System.out.println("THE INPUTS ARE INVALID");
 					else
 					{
@@ -695,11 +710,38 @@ import java.io.*;
 						System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 					}
 					break;	
+					case 7: 
+   							System.out.print("ENTER SOURCE STATION: ");
+    						String fareSrc = inp.readLine();
+    						System.out.print("ENTER DESTINATION STATION: ");
+    						String fareDst = inp.readLine();
+   						    HashMap<String, Boolean> processedFare = new HashMap<>();
+
+						    if(!g.containsVertex(fareSrc) || !g.containsVertex(fareDst))
+  						  {
+       						 System.out.println("THE INPUTS ARE INVALID");
+   							 }
+   							 else
+  							  {
+      					int distance = g.dijkstra(fareSrc, fareDst, false);
+       					int fare = g.calculateFare(distance);
+
+       					System.out.println("\nSOURCE : " + fareSrc);
+        				System.out.println("DESTINATION : " + fareDst);
+       					System.out.println("DISTANCE : " + distance + " KM");
+        				System.out.println("FARE : Rs " + fare);}
+   						 break;
+
+						case 8:
+								System.out.println("THANK YOU FOR USING METRO PATH NAVIGATOR");
+								System.exit(0);
+								break;
+					
                	         default:  //If switch expression does not match with any case, 
                 	        	//default statements are executed by the program.
                             	//No break is needed in the default case
                     	        System.out.println("Please enter a valid option! ");
-                        	    System.out.println("The options you can choose are from 1 to 6. ");
+                        	    System.out.println("The options you can choose are from 1 to 8. ");
                             
 				}
 			}
